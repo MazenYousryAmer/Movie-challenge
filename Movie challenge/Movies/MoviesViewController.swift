@@ -8,8 +8,15 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MoviesViewController: UIViewController {
 
+    //MARK: - iboutlets
+    @IBOutlet var tableMovies : UITableView!
+    
+    //MARK: - variables
+    let presenter : MoviesPresenter = MoviesPresenter()
+    
+    //MARK: - view mthods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
