@@ -16,3 +16,8 @@ class Movie: NSObject , Codable {
     var genres : [String] = []
     var rating : Int = 0
 }
+
+class Movies: NSObject , Codable {
+    
+    var movies : [Movie] = []
+}

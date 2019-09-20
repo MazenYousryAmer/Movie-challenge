@@ -10,4 +10,111 @@ import UIKit
 
 class MoviesPresenter: NSObject {
 
+    //MARK: - variable
+    weak var moviesVC : MoviesViewController?
+    var movieService : MoviesService = MoviesService()
+    var allMovies : Movies!
+    var formatedArrMovies : [[Movie]] = []
+    var filteredMovies : [[Movie]] = []
+    var isSearching = false
+    
+    //MARK: - service
+    func getAllMovies() {
+        // get all movies from file
+        movieService.getAllMovies(onSuccess: {[weak self] movies in
+            self?.allMovies = movies
+            self?.formatedArrMovies = self?.formateMovies(movies) ?? []
+            self?.filteredMovies = self?.formateMovies(movies) ?? []
+            }, onFailure: { error in
+                print("error")
+        })
+    }
+    
+    //MARK: - model formatting
+    func formateMovies(_ movies : Movies) -> [[Movie]] {
+        // format movies to fit in 2D array for table view
+        
+        // grouping movies by year to sort easier
+        var formatedMovies : [String : [Movie]] = [:]
+        for movie in movies.movies {
+            if formatedMovies.keys.contains(String(movie.year)) {
+                formatedMovies[String(movie.year)]?.append(movie)
+            }
+            else {
+                formatedMovies[String(movie.year)] = [movie]
+            }
+        }
+
+        // soring grouped movies by year descending order
+        var tempFormattingArray : [[Movie]] = []
+        for year in formatedMovies.keys.sorted().reversed() {
+            tempFormattingArray.append(formatedMovies[year]!)
+        }
+        return tempFormattingArray
+    }
+    
+    //MARK: - search
+    func cancelSearchHandler() {
+        // handle cancel saerch action
+        resetSearch()
+        moviesVC?.tableMovies.reloadData()
+    }
+    
+    func titleSearchHandler(_ searchText : String) {
+        // handle search by movie title
+        resetSearch()
+        
+//        let array = ["A", "B", "C"]
+//        let arraySlice = array.prefix(upTo: 5)
+//        let newArray = Array(arraySlice)
+//        print(newArray) // prints: ["A", "B", "C", "D", "E"]
+        
+        // search by title
+        for (index,arr) in filteredMovies.enumerated() {
+            let filteredYear = arr.filter({
+                $0.title.contains(searchText)
+            })
+            
+//            if filteredYear.count > 5 {
+//                let arraySlice = filteredYear.prefix(5)
+//                filteredYear = Array(arraySlice)
+//            }
+            
+            filteredMovies[index] = filteredYear
+        }
+        
+        // remove empty years
+        filteredMovies.removeAll(where: {
+            $0.count == 0
+        })
+        
+        moviesVC?.tableMovies.reloadData()
+    }
+    
+    func castSearchHandler(_ searchText : String) {
+        // handle search by actor name
+        resetSearch()
+        
+        // search by title
+        for (index,arr) in filteredMovies.enumerated() {
+            let filteredYear = arr.filter({
+                $0.cast.contains(searchText)
+            })
+            
+            filteredMovies[index] = filteredYear
+        }
+        
+        // remove empty years
+        filteredMovies.removeAll(where: {
+            $0.count == 0
+        })
+        
+         moviesVC?.tableMovies.reloadData()
+    }
+    
+    func resetSearch() {
+        // remove filters and put back original formated movies
+        filteredMovies = formatedArrMovies
+//        isSearching = false
+    }
 }

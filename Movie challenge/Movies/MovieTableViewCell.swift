@@ -10,6 +10,10 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
 
+    //MARK: - iboutlets
+    @IBOutlet var lblMovieTitle : UILabel!
+    @IBOutlet var imgMoviePortrait : UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
