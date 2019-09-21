@@ -43,12 +43,12 @@ class MoviesPresenterTests: XCTestCase {
     
     func testGetAllMovies() {
         
-        //given
+        // given
         presenter?.movieService = MoviesService()
         presenter?.allMovies = Movies()
         let expectation = self.expectation(description: "get movies")
         
-        //when
+        // when
         presenter?.movieService.getAllMovies(onSuccess: {[weak self] movies in
             self?.presenter?.allMovies = movies
             expectation.fulfill()
@@ -56,26 +56,68 @@ class MoviesPresenterTests: XCTestCase {
             expectation.isInverted = true
         })
         
-        //then
+        // then
         waitForExpectations(timeout: 2, handler: nil)
         XCTAssertTrue(presenter?.allMovies.movies.count ?? 0 > 0, "No Movies")
     }
     
     func testFormateMovies() {
         
-        //given
+        // given
         presenter?.allMovies = getMovies()
         
-        //when
+        // when
         let arr = presenter?.formateMovies(presenter?.allMovies ?? Movies())
         
-        //then
+        // then
         XCTAssertTrue(arr?.count == 10, "arr should have movies of 10 years")
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func testCancelSearch() {
+        // given
+        presenter?.allMovies = getMovies()
+        presenter?.formatedArrMovies = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
+        presenter?.filteredMovies = []
+        
+        // when
+        presenter?.cancelSearchHandler()
+        
+        // then
+        XCTAssertTrue(presenter?.formatedArrMovies.count == (presenter?.filteredMovies.count)! , "Cancel search is not working and original movies are not restored")
+    }
+    
+    func testTitleSearch() {
+        // given
+        presenter?.allMovies = getMovies()
+        presenter?.formatedArrMovies = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
+        presenter?.cancelSearchHandler()
+        
+        // when
+        presenter?.titleSearchHandler("12 Strong")
+        
+        // then
+        if let moviesOfTheYear = presenter?.filteredMovies[0] {
+            if let movie = moviesOfTheYear.first , moviesOfTheYear.count == 1 {
+                XCTAssertTrue(movie.title == "12 Strong", "Something wrong with movie title searching")
+            }
+        }
+    }
+    
+    func testActorSearch() {
+        // given
+        presenter?.allMovies = getMovies()
+        presenter?.formatedArrMovies = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
+        presenter?.cancelSearchHandler()
+        
+        // when
+        presenter?.castSearchHandler("John Cena")
+        
+        // then
+        if let moviesOfTheYear = presenter?.filteredMovies[0] {
+            if let movie = moviesOfTheYear.first {
+                XCTAssertTrue(movie.title == "Blockers", "Something wrong with movie cast searching")
+            }
+        }
     }
 
     func testPerformanceExample() {
