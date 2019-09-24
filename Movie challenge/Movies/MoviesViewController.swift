@@ -42,6 +42,7 @@ class MoviesViewController: UIViewController {
     }
     
     func setupTableHeight() {
+        // table configuration
         tableMovies.estimatedRowHeight = 50.0
         tableMovies.rowHeight = UITableView.automaticDimension
     }
@@ -106,8 +107,7 @@ extension MoviesViewController : UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.trimmingCharacters(in: .whitespaces) == ""
-        {
+        if searchText.trimmingCharacters(in: .whitespaces) == "" {
             presenter.cancelSearchHandler()
         }
         else {

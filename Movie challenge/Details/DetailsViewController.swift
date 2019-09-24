@@ -22,6 +22,9 @@ class DetailsViewController: UIViewController {
     @IBOutlet var heightConstraintCastView : NSLayoutConstraint!
     @IBOutlet var topConstraintCastView : NSLayoutConstraint!
     
+    @IBOutlet var collectionGallery : UICollectionView!
+    @IBOutlet var heightConstraintGalleryView : NSLayoutConstraint!
+    
     //MARK: - variables
     var presenter : DetailsPresenter = DetailsPresenter()
     
@@ -35,12 +38,18 @@ class DetailsViewController: UIViewController {
     
     //MARK: - setup
     func setup() {
+        setupPresenter()
         setupMovieDetails()
         presenter.getMoviePhotos()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
-            self.presenter.getMoviePhotos()
-        })
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+//            self.presenter.getMoviePhotos()
+//        })
+        
+    }
+    
+    func setupPresenter() {
+        presenter.movieDetailsDelegate = self
     }
     
     func setupMovieDetails() {
@@ -69,6 +78,26 @@ class DetailsViewController: UIViewController {
             topConstraintCastView.constant = 10.0
         }
     }
+    
+    func setupGallery() {
+        
+        guard var galleryRownsCount = presenter.allPhotos.count / 2 as? Int else {
+            return
+        }
+        
+        if presenter.allPhotos.count % 2 == 1 {
+            galleryRownsCount += 1
+        }
+        
+        heightConstraintGalleryView.constant = (CGFloat(galleryRownsCount) * kGalleryPhotoHeight) + CGFloat(galleryRownsCount - 1) * kGalleryPhotoVerticalSpacing
+        UIView.animate(withDuration: 0.5, animations: {
+            self.collectionGallery.layoutIfNeeded()
+        }, completion: { _ in
+            self.collectionGallery.reloadData()
+        })
+        
+    }
+
 
 }
 
@@ -89,6 +118,51 @@ extension DetailsViewController : UITableViewDelegate , UITableViewDataSource {
             cell.lblMovieInfo.text = presenter.movie.cast?[indexPath.row] ?? ""
         }
         return cell
+    }
+    
+}
+
+extension DetailsViewController : UICollectionViewDelegate , UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return presenter.allPhotos.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as! GalleryCollectionViewCell
+        cell.lblGalleryTitle.text = presenter.allPhotos[indexPath.row].title
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == presenter.allPhotos.count - 4 {
+            self.presenter.getMoviePhotos()
+        }
+    }
+    
+    
+    
+    /*
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == presenter.allPhotos.count - 4 {
+            print("page Here")
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        for cell in collectionGallery.visibleCells {
+            let indexPath = collectionGallery.indexPath(for: cell)
+            print(indexPath)
+        }
+    }
+    */
+    
+    
+    
+}
+
+extension DetailsViewController : DetailsProtocol {
+    func reloadGallery() {
+        setupGallery()
     }
     
     

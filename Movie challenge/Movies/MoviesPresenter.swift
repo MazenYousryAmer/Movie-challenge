@@ -20,7 +20,7 @@ class MoviesPresenter: NSObject {
     var formatedArrMovies : [[Movie]] = []
     var filteredMovies : [[Movie]] = []
     var isSearching = false
-    var moviesDelegate : MoviesProtocol!
+    weak var moviesDelegate : MoviesProtocol!
     
     //MARK: - service
     func getAllMovies() {
