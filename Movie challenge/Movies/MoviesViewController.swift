@@ -23,20 +23,37 @@ class MoviesViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         setup()
+        self.navigationItem.title = "MOVIES"
     }
     
     //MARK: - setup
     func setup() {
         setupPresenter()
         setupModel()
+        setupTableHeight()
     }
     
     func setupPresenter() {
-        presenter.moviesVC = self
+        presenter.moviesDelegate = self
     }
     
     func setupModel() {
         presenter.getAllMovies()
+    }
+    
+    func setupTableHeight() {
+        tableMovies.estimatedRowHeight = 50.0
+        tableMovies.rowHeight = UITableView.automaticDimension
+    }
+    
+    //MARK: - navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DetailsViewController" {
+            if let vc = segue.destination as? DetailsViewController {
+                vc.presenter = DetailsPresenter()
+                vc.presenter.movie = sender as? Movie                
+            }
+        }
     }
 }
 
@@ -73,6 +90,7 @@ extension MoviesViewController : UITableViewDelegate , UITableViewDataSource {
         if let moviesOfTheYear = presenter.filteredMovies[indexPath.section] as? [Movie] {
             if let movie = moviesOfTheYear[indexPath.row] as? Movie {
                 // push segue
+                self.performSegue(withIdentifier: "DetailsViewController", sender: movie)
             }
         }
     }
@@ -105,4 +123,12 @@ extension MoviesViewController : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         print(selectedScope)
     }
+}
+
+extension MoviesViewController : MoviesProtocol {
+    func reloadMovies() {
+        tableMovies.reloadData()
+    }
+    
+    
 }

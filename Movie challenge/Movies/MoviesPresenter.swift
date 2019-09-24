@@ -8,15 +8,19 @@
 
 import UIKit
 
+protocol MoviesProtocol : class {
+    func reloadMovies()
+}
+
 class MoviesPresenter: NSObject {
 
     //MARK: - variable
-    weak var moviesVC : MoviesViewController?
     var movieService : MoviesService = MoviesService()
     var allMovies : Movies!
     var formatedArrMovies : [[Movie]] = []
     var filteredMovies : [[Movie]] = []
     var isSearching = false
+    var moviesDelegate : MoviesProtocol!
     
     //MARK: - service
     func getAllMovies() {
@@ -57,7 +61,7 @@ class MoviesPresenter: NSObject {
     func cancelSearchHandler() {
         // handle cancel saerch action
         resetSearch()
-        moviesVC?.tableMovies.reloadData()
+        moviesDelegate.reloadMovies()
     }
     
     func titleSearchHandler(_ searchText : String) {
@@ -88,7 +92,7 @@ class MoviesPresenter: NSObject {
             $0.count == 0
         })
         
-        moviesVC?.tableMovies.reloadData()
+        moviesDelegate.reloadMovies()
     }
     
     func castSearchHandler(_ searchText : String) {
@@ -98,7 +102,7 @@ class MoviesPresenter: NSObject {
         // search by title
         for (index,arr) in filteredMovies.enumerated() {
             let filteredYear = arr.filter({
-                $0.cast.contains(searchText)
+                $0.cast?.contains(searchText) ?? false
             })
             
             filteredMovies[index] = filteredYear
@@ -109,7 +113,7 @@ class MoviesPresenter: NSObject {
             $0.count == 0
         })
         
-         moviesVC?.tableMovies.reloadData()
+        moviesDelegate.reloadMovies()
     }
     
     func resetSearch() {

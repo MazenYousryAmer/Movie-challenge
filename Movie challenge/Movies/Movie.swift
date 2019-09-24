@@ -12,8 +12,8 @@ class Movie: NSObject , Codable {
 
     var title : String = ""
     var year : Int = 0
-    var cast : [String] = []
-    var genres : [String] = []
+    var cast : [String]? = []
+    var genres : [String]? = []
     var rating : Int = 0
 }
 
