@@ -25,6 +25,10 @@ class DetailsViewController: UIViewController {
     @IBOutlet var collectionGallery : UICollectionView!
     @IBOutlet var heightConstraintGalleryView : NSLayoutConstraint!
     
+    @IBOutlet var lblActivity :UILabel!
+    @IBOutlet var btnActivity :UIButton!
+    @IBOutlet var loadingIndicator : UIActivityIndicatorView!
+    
     //MARK: - variables
     var presenter : DetailsPresenter = DetailsPresenter()
     
@@ -50,6 +54,7 @@ class DetailsViewController: UIViewController {
     
     func setupPresenter() {
         presenter.movieDetailsDelegate = self
+        presenter.status = ActivityStatus.loadPhotos
     }
     
     func setupMovieDetails() {
@@ -89,15 +94,66 @@ class DetailsViewController: UIViewController {
             galleryRownsCount += 1
         }
         
-        heightConstraintGalleryView.constant = (CGFloat(galleryRownsCount) * kGalleryPhotoHeight) + CGFloat(galleryRownsCount - 1) * kGalleryPhotoVerticalSpacing
+        // cell height * count + spacing height * number of spaces + header height
+        heightConstraintGalleryView.constant = (CGFloat(galleryRownsCount) * kGalleryPhotoHeight) + CGFloat(galleryRownsCount - 1) * kGalleryPhotoVerticalSpacing + kcollectionHeaderHeight
         UIView.animate(withDuration: 0.5, animations: {
             self.collectionGallery.layoutIfNeeded()
         }, completion: { _ in
             self.collectionGallery.reloadData()
         })
-        
+    }
+    
+    func setupActivityStatusView() {
+        switch presenter.status {
+        case .loadPhotos:
+            lblActivity.isHidden = true
+            btnActivity.isHidden = true
+            loadingIndicator.isHidden = false
+            loadingIndicator.startAnimating()
+            
+        case .errorPhotos:
+            lblActivity.isHidden = false
+            btnActivity.isHidden = false
+            loadingIndicator.isHidden = true
+            
+            lblActivity.text = "error occured , try again"
+            
+        case .showAllPhotos:
+            lblActivity.isHidden = false
+            btnActivity.isHidden = false
+            loadingIndicator.isHidden = true
+            
+            lblActivity.text = "Show all images"
+            
+        case .noPhotos:
+            lblActivity.isHidden = false
+            btnActivity.isHidden = true
+            loadingIndicator.isHidden = true
+            
+            lblActivity.text = "Sorry no images"
+        }
     }
 
+    //MARKL - ibactions
+    @IBAction func activityBtnPressed() {
+        if presenter.status == .errorPhotos {
+            presenter.getMoviePhotos()
+        }
+        else if presenter.status == .showAllPhotos {
+            performSegue(withIdentifier: "ImagesListingViewController", sender: nil)
+        }
+    }
+    
+    //MARK: - navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ImagesListingViewController" {
+            if let vc = segue.destination as? ImagesListingViewController {
+                vc.presenter = ImagesListingPresenter()
+                vc.presenter.movie = presenter.movie
+                vc.presenter.allPhotos = presenter.allPhotos
+            }
+        }
+    }
 
 }
 
@@ -133,14 +189,44 @@ extension DetailsViewController : UICollectionViewDelegate , UICollectionViewDat
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == presenter.allPhotos.count - 4 {
-            self.presenter.getMoviePhotos()
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if indexPath.row == presenter.allPhotos.count - 4 {
+//            self.presenter.getMoviePhotos()
+//        }
+//    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard
+                let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: "GalleryCollectionReusableView",
+                    for: indexPath) as? GalleryCollectionReusableView
+                else {
+                    fatalError("Invalid view type")
+            }
+            headerView.lblTitle.text = "Images :"
+            return headerView
+        default:
+            assert(false, "Invalid element type")
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        // Get the view for the first header
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        
+        // Use this view to calculate the optimal size based on the collection view's width
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required, // Width is fixed
+            verticalFittingPriority: .fittingSizeLevel) // Height can be as large as needed
     
-    
+    }
     /*
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == presenter.allPhotos.count - 4 {
@@ -165,5 +251,8 @@ extension DetailsViewController : DetailsProtocol {
         setupGallery()
     }
     
+    func showActivityStatus() {
+        setupActivityStatusView()
+    }
     
 }

@@ -16,3 +16,4 @@ let kFlickrKeySecret = "547519c1bfedf3ab"
 let kGalleryPhotoHeight : CGFloat = 150.0
 let kGalleryPhotoVerticalSpacing : CGFloat = 10.0
 let kMovieDetailsHeight : CGFloat = 44.0
+let kcollectionHeaderHeight : CGFloat = 50.0

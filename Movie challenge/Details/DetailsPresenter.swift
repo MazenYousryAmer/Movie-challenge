@@ -10,53 +10,52 @@ import UIKit
 
 protocol DetailsProtocol : class {
     func reloadGallery()
+    func showActivityStatus()
+}
+
+enum ActivityStatus {
+    case loadPhotos
+    case errorPhotos
+    case showAllPhotos
+    case noPhotos
 }
 
 class DetailsPresenter: NSObject {
 
     //MARK: - variable
     var movie : Movie!
-    var movieDetailsDelegate : DetailsProtocol!
+    var movieDetailsDelegate : DetailsProtocol?
     var flickrService : FlickrService = FlickrService()
     var currentPageNumber = 1
     var allPhotos : [Photo] = []
     var canGetNextPage = true
     var canFetchData = true
+    var status : ActivityStatus = ActivityStatus.loadPhotos {
+        didSet {
+            DispatchQueue.main.async {
+                self.movieDetailsDelegate?.showActivityStatus()
+            }
+        }
+    }
     
     
     //MARK: - service
     func getMoviePhotos() {
-        if !canFetchData {
-            return
-        }
-        
-        canFetchData = false
         flickrService.getFlickrMovieImages(movieTitle: movie.title, currentPage: currentPageNumber, onSuccess: { [weak self] photos in
-            self?.canFetchData = true
             if photos.count > 0 {
-                if photos.count == 10 {
-                    self?.canGetNextPage = true
-                }
-                else {
-                    self?.canGetNextPage = false
-                }
                 self?.allPhotos.append(contentsOf: photos)
-                self?.currentPageNumber += 1
                 
                 DispatchQueue.main.async {
-                    self?.movieDetailsDelegate.reloadGallery()
-
+                    self?.status = .showAllPhotos
+                    self?.movieDetailsDelegate?.reloadGallery()
                 }
-//                print(self?.allPhotos.count)
-//                let x = self?.allPhotos.last
-//                print(x?.getPhotoURL())
             }
             else {
-                self?.canGetNextPage = false
+                self?.status = .noPhotos
             }
             
-            }, onFailure: { error in
-                print(error)
+            }, onFailure: { [weak self] error in
+                self?.status = .errorPhotos
                 
         })
     }

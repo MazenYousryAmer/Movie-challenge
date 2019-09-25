@@ -67,10 +67,45 @@ class MoviesPresenterTests: XCTestCase {
         presenter?.allMovies = getMovies()
         
         // when
-        let arr = presenter?.formateMovies(presenter?.allMovies ?? Movies())
+        var arr : [[Movie]] = []
+        
+        self.measure {
+            arr = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
+        }
         
         // then
-        XCTAssertTrue(arr?.count == 10, "arr should have movies of 10 years")
+        XCTAssertTrue(arr.count == 10, "Array should have movies of 10 years")
+    }
+    
+    func testFormatedMoviesByRating() {
+        
+        // given
+        presenter?.allMovies = getMovies()
+        presenter?.formatedArrMovies = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
+        var index = 1
+        var sorted = true
+        
+        // when
+        self.measure {
+            presenter?.sortFormatedMoviesByRating(sectionedMovies: presenter?.formatedArrMovies ?? [])
+        }
+        
+        // then
+        for MoviesOfYear in presenter?.formatedArrMovies ?? [] {
+            while index > MoviesOfYear.count - 1 {
+                let movie = MoviesOfYear[index]
+                if movie.rating > MoviesOfYear[index - 1].rating {
+                    sorted = true
+                }
+                else {
+                    sorted = false
+                }
+                index += 1
+            }
+        }
+        
+        XCTAssert(sorted, "Sort by rating not working properly")
+        
     }
     
     func testCancelSearch() {
@@ -80,7 +115,9 @@ class MoviesPresenterTests: XCTestCase {
         presenter?.filteredMovies = []
         
         // when
-        presenter?.cancelSearchHandler()
+        self.measure {
+            presenter?.cancelSearchHandler()
+        }
         
         // then
         XCTAssertTrue(presenter?.formatedArrMovies.count == (presenter?.filteredMovies.count)! , "Cancel search is not working and original movies are not restored")
@@ -93,7 +130,9 @@ class MoviesPresenterTests: XCTestCase {
         presenter?.cancelSearchHandler()
         
         // when
-        presenter?.titleSearchHandler("12 Strong")
+        self.measure {
+            presenter?.titleSearchHandler("12 Strong")
+        }
         
         // then
         if let moviesOfTheYear = presenter?.filteredMovies[0] {
@@ -107,23 +146,17 @@ class MoviesPresenterTests: XCTestCase {
         // given
         presenter?.allMovies = getMovies()
         presenter?.formatedArrMovies = presenter?.formateMovies(presenter?.allMovies ?? Movies()) ?? []
-        presenter?.cancelSearchHandler()
         
         // when
-        presenter?.castSearchHandler("John Cena")
+        self.measure {
+            presenter?.castSearchHandler("John Cena")
+        }
         
         // then
         if let moviesOfTheYear = presenter?.filteredMovies[0] {
             if let movie = moviesOfTheYear.first {
                 XCTAssertTrue(movie.title == "Blockers", "Something wrong with movie cast searching")
             }
-        }
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
         }
     }
 

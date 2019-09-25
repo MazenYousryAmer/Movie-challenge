@@ -10,6 +10,7 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     
+    //MARK: - iboutlets
     @IBOutlet var lblGalleryTitle : UILabel!
     
 }

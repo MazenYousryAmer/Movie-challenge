@@ -10,6 +10,7 @@ import UIKit
 
 protocol MoviesProtocol : class {
     func reloadMovies()
+    func showMoviesLoadingError()
 }
 
 class MoviesPresenter: NSObject {
@@ -20,7 +21,7 @@ class MoviesPresenter: NSObject {
     var formatedArrMovies : [[Movie]] = []
     var filteredMovies : [[Movie]] = []
     var isSearching = false
-    weak var moviesDelegate : MoviesProtocol!
+    weak var moviesDelegate : MoviesProtocol?
     
     //MARK: - service
     func getAllMovies() {
@@ -28,8 +29,10 @@ class MoviesPresenter: NSObject {
         movieService.getAllMovies(onSuccess: {[weak self] movies in
             self?.allMovies = movies
             self?.formatedArrMovies = self?.formateMovies(movies) ?? []
+            self?.sortFormatedMoviesByRating(sectionedMovies: self?.formatedArrMovies ?? [])
             self?.filteredMovies = self?.formateMovies(movies) ?? []
-            }, onFailure: { error in
+            }, onFailure: { [weak self] error in
+                self?.moviesDelegate?.showMoviesLoadingError()
                 print("error")
         })
     }
@@ -57,11 +60,20 @@ class MoviesPresenter: NSObject {
         return tempFormattingArray
     }
     
+    func sortFormatedMoviesByRating(sectionedMovies : [[Movie]]) {
+        for (index, var MoviesOfYear) in formatedArrMovies.enumerated() {
+            for _ in MoviesOfYear {
+                MoviesOfYear = MoviesOfYear.sorted(by: { $0.rating > $1.rating })
+            }
+            formatedArrMovies[index] = MoviesOfYear
+        }
+    }
+    
     //MARK: - search
     func cancelSearchHandler() {
         // handle cancel saerch action
         resetSearch()
-        moviesDelegate.reloadMovies()
+        moviesDelegate?.reloadMovies()
     }
     
     func titleSearchHandler(_ searchText : String) {
@@ -92,7 +104,7 @@ class MoviesPresenter: NSObject {
             $0.count == 0
         })
         
-        moviesDelegate.reloadMovies()
+        moviesDelegate?.reloadMovies()
     }
     
     func castSearchHandler(_ searchText : String) {
@@ -113,7 +125,7 @@ class MoviesPresenter: NSObject {
             $0.count == 0
         })
         
-        moviesDelegate.reloadMovies()
+        moviesDelegate?.reloadMovies()
     }
     
     func resetSearch() {

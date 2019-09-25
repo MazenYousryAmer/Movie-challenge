@@ -13,6 +13,7 @@ class MoviesViewController: UIViewController {
     //MARK: - iboutlets
     @IBOutlet var tableMovies : UITableView!
     @IBOutlet var searchBarMovie : UISearchBar!
+    @IBOutlet var lblErrorMovies : UILabel!
     
     //MARK: - variables
     let presenter : MoviesPresenter = MoviesPresenter()
@@ -31,6 +32,7 @@ class MoviesViewController: UIViewController {
         setupPresenter()
         setupModel()
         setupTableHeight()
+        setupIdentifiers()
     }
     
     func setupPresenter() {
@@ -45,6 +47,14 @@ class MoviesViewController: UIViewController {
         // table configuration
         tableMovies.estimatedRowHeight = 50.0
         tableMovies.rowHeight = UITableView.automaticDimension
+    }
+    
+    func setupIdentifiers() {
+        searchBarMovie.isAccessibilityElement = true
+        searchBarMovie.accessibilityIdentifier = "MovieSearch"
+        
+        tableMovies.isAccessibilityElement = true
+        tableMovies.accessibilityIdentifier = "MovieTable"
     }
     
     //MARK: - navigation
@@ -102,10 +112,6 @@ extension MoviesViewController : UISearchBarDelegate {
         presenter.cancelSearchHandler()
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("here")
-    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.trimmingCharacters(in: .whitespaces) == "" {
             presenter.cancelSearchHandler()
@@ -128,6 +134,11 @@ extension MoviesViewController : UISearchBarDelegate {
 extension MoviesViewController : MoviesProtocol {
     func reloadMovies() {
         tableMovies.reloadData()
+    }
+    
+    func showMoviesLoadingError() {
+        self.tableMovies.isHidden = true
+        lblErrorMovies.isHidden = false
     }
     
     
