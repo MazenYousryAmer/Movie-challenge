@@ -29,8 +29,8 @@ class MoviesPresenter: NSObject {
         movieService.getAllMovies(onSuccess: {[weak self] movies in
             self?.allMovies = movies
             self?.formatedArrMovies = self?.formateMovies(movies) ?? []
-            self?.sortFormatedMoviesByRating(sectionedMovies: self?.formatedArrMovies ?? [])
-            self?.filteredMovies = self?.formateMovies(movies) ?? []
+            self?.formatedArrMovies = self?.sortFormatedMoviesByRating() ?? []
+            self?.filteredMovies = self?.formatedArrMovies ?? []
             }, onFailure: { [weak self] error in
                 self?.moviesDelegate?.showMoviesLoadingError()
                 print("error")
@@ -60,13 +60,14 @@ class MoviesPresenter: NSObject {
         return tempFormattingArray
     }
     
-    func sortFormatedMoviesByRating(sectionedMovies : [[Movie]]) {
+    func sortFormatedMoviesByRating() -> [[Movie]] {
         for (index, var MoviesOfYear) in formatedArrMovies.enumerated() {
             for _ in MoviesOfYear {
                 MoviesOfYear = MoviesOfYear.sorted(by: { $0.rating > $1.rating })
             }
             formatedArrMovies[index] = MoviesOfYear
         }
+        return formatedArrMovies
     }
     
     //MARK: - search

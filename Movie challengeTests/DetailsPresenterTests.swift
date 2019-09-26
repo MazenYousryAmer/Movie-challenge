@@ -39,7 +39,7 @@ class DetailsPresenterTests: XCTestCase {
             self?.presenter?.allPhotos = images
             expectation.fulfill()
         }, onFailure: { _ in
-            expectation.isInverted
+            expectation.isInverted = true
         })
         
         waitForExpectations(timeout: 5, handler: nil)

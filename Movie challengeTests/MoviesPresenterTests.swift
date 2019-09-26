@@ -87,7 +87,7 @@ class MoviesPresenterTests: XCTestCase {
         
         // when
         self.measure {
-            presenter?.sortFormatedMoviesByRating(sectionedMovies: presenter?.formatedArrMovies ?? [])
+            presenter?.sortFormatedMoviesByRating()
         }
         
         // then

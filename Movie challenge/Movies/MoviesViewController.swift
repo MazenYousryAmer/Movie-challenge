@@ -32,7 +32,7 @@ class MoviesViewController: UIViewController {
         setupPresenter()
         setupModel()
         setupTableHeight()
-        setupIdentifiers()
+//        setupIdentifiers()
     }
     
     func setupPresenter() {

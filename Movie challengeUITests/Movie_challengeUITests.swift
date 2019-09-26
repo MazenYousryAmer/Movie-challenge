@@ -31,34 +31,48 @@ class Movie_challengeUITests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testApp() {
+    func testAppFlow() {
         
         let app = XCUIApplication()
-        let movietableTable = app/*@START_MENU_TOKEN@*/.tables["MovieTable"]/*[[".tables[\"2018, Insidious: The Last Key, The Strange Ones, Sweet Country, The Commuter, Proud Mary, Acts of Violence, Freak Show, Humor Me, 12 Strong, Den of Thieves, Forever My Girl, Maze Runner: The Death Cure, The Insult, Please Stand By, Winchester, A Fantastic Woman\"]",".tables[\"MovieTable\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        movietableTable/*@START_MENU_TOKEN@*/.staticTexts["Insidious: The Last Key"]/*[[".cells[\"Insidious: The Last Key\"].staticTexts[\"Insidious: The Last Key\"]",".staticTexts[\"Insidious: The Last Key\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        
+        let movietableTable = app.tables
+        movietableTable.staticTexts["The Strange Ones"].tap()
         let scrollViewsQuery = app.scrollViews
         let tablesQuery = scrollViewsQuery.otherElements.tables
-        let leighWhannellStaticText = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Leigh Whannell"]/*[[".cells.staticTexts[\"Leigh Whannell\"]",".staticTexts[\"Leigh Whannell\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let leighWhannellStaticText = tablesQuery.staticTexts["Emily Althaus"]
         leighWhannellStaticText.swipeUp()
         leighWhannellStaticText.swipeDown()
-        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Lin Shaye"]/*[[".cells.staticTexts[\"Lin Shaye\"]",".staticTexts[\"Lin Shaye\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeUp()
-        
+        tablesQuery.staticTexts["Alex Pettyfer"].swipeUp()
         let collectionViewsQuery = app/*@START_MENU_TOKEN@*/.collectionViews/*[[".scrollViews.collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         collectionViewsQuery.otherElements.containing(.staticText, identifier:"Images :").element.swipeUp()
-        collectionViewsQuery.staticTexts["Images :"].swipeUp()
-        
         let moviesButton = app.navigationBars["Movie_challenge.DetailsView"].buttons["MOVIES"]
         moviesButton.tap()
-        movietableTable/*@START_MENU_TOKEN@*/.staticTexts["Winchester"]/*[[".cells[\"Winchester\"].staticTexts[\"Winchester\"]",".staticTexts[\"Winchester\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Angus Sampson"]/*[[".cells.staticTexts[\"Angus Sampson\"]",".staticTexts[\"Angus Sampson\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeUp()
+        movietableTable.staticTexts["Beirut"].tap()
+        tablesQuery.staticTexts["Mark Pellegrino"].swipeUp()
         scrollViewsQuery.otherElements.containing(.staticText, identifier:"Show all images").children(matching: .button).element.tap()
-        
         let collectionViewsQuery2 = app.collectionViews
-        collectionViewsQuery2/*@START_MENU_TOKEN@*/.staticTexts["29 Winchester (2)"]/*[[".cells.staticTexts[\"29 Winchester (2)\"]",".staticTexts[\"29 Winchester (2)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeUp()
-        collectionViewsQuery2/*@START_MENU_TOKEN@*/.staticTexts["29 Winchester (43)"]/*[[".cells.staticTexts[\"29 Winchester (43)\"]",".staticTexts[\"29 Winchester (43)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeDown()
+        collectionViewsQuery2.staticTexts["XNM 05"].swipeUp()
+        collectionViewsQuery2.staticTexts["IMGL97557"].swipeDown()
         app.navigationBars["Movie_challenge.ImagesListingView"].buttons["Back"].tap()
         moviesButton.tap()
+    }
+    
+    func testSearch() {
+        
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        let searchHereSearchField = tablesQuery.searchFields["Search here"]
+        searchHereSearchField.tap()
+        searchHereSearchField.typeText("12 Strong")
+        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["12 Strong"]/*[[".cells[\"12 Strong\"].staticTexts[\"12 Strong\"]",".cells[\"cell\"].staticTexts[\"12 Strong\"]",".staticTexts[\"12 Strong\"]"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        let moviesButton = app.navigationBars["Movie_challenge.DetailsView"].buttons["MOVIES"]
+        moviesButton.tap()
+        let clearTextButton = tablesQuery.buttons["Clear text"]
+        clearTextButton.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["Actor"]/*[[".segmentedControls.buttons[\"Actor\"]",".buttons[\"Actor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        searchHereSearchField.typeText("John Cena")
+        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Daddy's Home 2"]/*[[".cells[\"Daddy's Home 2\"].staticTexts[\"Daddy's Home 2\"]",".staticTexts[\"Daddy's Home 2\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        moviesButton.tap()
+        clearTextButton.tap()
     }
 
 }
