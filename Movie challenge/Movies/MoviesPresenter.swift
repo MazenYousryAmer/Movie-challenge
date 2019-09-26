@@ -27,13 +27,22 @@ class MoviesPresenter: NSObject {
     func getAllMovies() {
         // get all movies from file
         movieService.getAllMovies(onSuccess: {[weak self] movies in
+            CacheManager.saveMovies(movies: movies)
             self?.allMovies = movies
             self?.formatedArrMovies = self?.formateMovies(movies) ?? []
             self?.formatedArrMovies = self?.sortFormatedMoviesByRating() ?? []
             self?.filteredMovies = self?.formatedArrMovies ?? []
             }, onFailure: { [weak self] error in
-                self?.moviesDelegate?.showMoviesLoadingError()
-                print("error")
+                if let cachedMovies = CacheManager.loadMovies() , cachedMovies.movies.count > 0 {
+                    self?.allMovies = cachedMovies
+                    self?.formatedArrMovies = self?.formateMovies(cachedMovies) ?? []
+                    self?.formatedArrMovies = self?.sortFormatedMoviesByRating() ?? []
+                    self?.filteredMovies = self?.formatedArrMovies ?? []
+                }
+                else {
+                    self?.moviesDelegate?.showMoviesLoadingError()
+                }
+
         })
     }
     
