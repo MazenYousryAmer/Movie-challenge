@@ -20,9 +20,8 @@ class Photo: NSObject , Codable {
     var isfriend : Int = 0
     var isfamily : Int = 0
     
-    func getPhotoURL() -> String {
-        return "http://farm​\(farm).static.flickr.com/​\(server)/​\(id)_​\(secret).jpg"
-//        return URL(string: str)!
+    func getPhotoURL() -> URL {
+        return URL(string: "http://farm\(farm).static.flickr.com/\(server)/\(id)_\(secret).png")!
     }
 
 }

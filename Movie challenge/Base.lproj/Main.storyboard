@@ -267,9 +267,12 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="180" height="150"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bai-xI-f1w">
-                                                            <rect key="frame" x="0.0" y="0.0" width="180" height="150"/>
-                                                            <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tRo-Hk-WeB">
+                                                            <rect key="frame" x="0.0" y="20.5" width="180" height="129.5"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bai-xI-f1w">
+                                                            <rect key="frame" x="0.0" y="0.0" width="180" height="20.5"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -277,12 +280,16 @@
                                                     </subviews>
                                                 </view>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="Bai-xI-f1w" secondAttribute="bottom" id="17E-Q8-HMd"/>
                                                     <constraint firstAttribute="trailing" secondItem="Bai-xI-f1w" secondAttribute="trailing" id="4ct-hZ-0QZ"/>
+                                                    <constraint firstAttribute="trailing" secondItem="tRo-Hk-WeB" secondAttribute="trailing" id="I6D-HL-F9W"/>
                                                     <constraint firstItem="Bai-xI-f1w" firstAttribute="leading" secondItem="UfG-P7-Gc8" secondAttribute="leading" id="ITG-Rf-6Yt"/>
                                                     <constraint firstItem="Bai-xI-f1w" firstAttribute="top" secondItem="UfG-P7-Gc8" secondAttribute="top" id="KHK-yK-8Z5"/>
+                                                    <constraint firstAttribute="bottom" secondItem="tRo-Hk-WeB" secondAttribute="bottom" id="agK-Jc-ZbV"/>
+                                                    <constraint firstItem="tRo-Hk-WeB" firstAttribute="leading" secondItem="UfG-P7-Gc8" secondAttribute="leading" id="cnl-Eh-l8H"/>
+                                                    <constraint firstItem="tRo-Hk-WeB" firstAttribute="top" secondItem="Bai-xI-f1w" secondAttribute="bottom" id="lS4-Oy-XJ7"/>
                                                 </constraints>
                                                 <connections>
+                                                    <outlet property="imgGalleryMovie" destination="tRo-Hk-WeB" id="wTU-4t-sXH"/>
                                                     <outlet property="lblGalleryTitle" destination="Bai-xI-f1w" id="KeZ-Jt-Umw"/>
                                                 </connections>
                                             </collectionViewCell>
@@ -432,9 +439,12 @@
                                             <rect key="frame" x="0.0" y="0.0" width="180" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uue-9o-p70">
-                                                    <rect key="frame" x="0.0" y="0.0" width="180" height="150"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5gX-HG-cfx">
+                                                    <rect key="frame" x="0.0" y="20.5" width="180" height="129.5"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uue-9o-p70">
+                                                    <rect key="frame" x="0.0" y="0.0" width="180" height="20.5"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -442,12 +452,16 @@
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="5gX-HG-cfx" secondAttribute="bottom" id="13r-7o-JHr"/>
                                             <constraint firstAttribute="trailing" secondItem="Uue-9o-p70" secondAttribute="trailing" id="3QT-mB-JcT"/>
                                             <constraint firstItem="Uue-9o-p70" firstAttribute="leading" secondItem="gMr-t0-eg9" secondAttribute="leading" id="TVG-fG-n77"/>
+                                            <constraint firstItem="5gX-HG-cfx" firstAttribute="leading" secondItem="gMr-t0-eg9" secondAttribute="leading" id="VWK-79-LaP"/>
                                             <constraint firstItem="Uue-9o-p70" firstAttribute="top" secondItem="gMr-t0-eg9" secondAttribute="top" id="bgc-EZ-I9N"/>
-                                            <constraint firstAttribute="bottom" secondItem="Uue-9o-p70" secondAttribute="bottom" id="n8T-FB-UWq"/>
+                                            <constraint firstAttribute="trailing" secondItem="5gX-HG-cfx" secondAttribute="trailing" id="czV-Wb-Hgo"/>
+                                            <constraint firstItem="5gX-HG-cfx" firstAttribute="top" secondItem="Uue-9o-p70" secondAttribute="bottom" id="u0F-gP-wTF"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="imgGalleryMovie" destination="5gX-HG-cfx" id="rPL-D9-ZuO"/>
                                             <outlet property="lblGalleryTitle" destination="Uue-9o-p70" id="oIi-ua-AtD"/>
                                         </connections>
                                     </collectionViewCell>
@@ -473,7 +487,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T7M-bB-4kP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2716" y="39"/>
+            <point key="canvasLocation" x="2715.9420289855075" y="38.839285714285715"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5PH-02-vMe">

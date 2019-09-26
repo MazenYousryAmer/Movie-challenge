@@ -186,6 +186,7 @@ extension DetailsViewController : UICollectionViewDelegate , UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as! GalleryCollectionViewCell
         cell.lblGalleryTitle.text = presenter.allPhotos[indexPath.row].title
+        cell.imgGalleryMovie.sd_setImage(with:presenter.allPhotos[indexPath.row].getPhotoURL(), completed: nil)
         return cell
     }
     
