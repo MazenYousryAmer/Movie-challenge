@@ -190,13 +190,6 @@ extension DetailsViewController : UICollectionViewDelegate , UICollectionViewDat
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if indexPath.row == presenter.allPhotos.count - 4 {
-//            self.presenter.getMoviePhotos()
-//        }
-//    }
-    
-    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 
         switch kind {
@@ -215,36 +208,27 @@ extension DetailsViewController : UICollectionViewDelegate , UICollectionViewDat
             assert(false, "Invalid element type")
         }
     }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//
+//        // Get the view for the first header
+//        let indexPath = IndexPath(row: 0, section: section)
+//        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+//
+//        // Use this view to calculate the optimal size based on the collection view's width
+//        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
+//                                                  withHorizontalFittingPriority: .required, // Width is fixed
+//            verticalFittingPriority: .fittingSizeLevel) // Height can be as large as needed
+//
+//    }
+}
+
+extension DetailsViewController : UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        // Get the view for the first header
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        
-        // Use this view to calculate the optimal size based on the collection view's width
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
-                                                  withHorizontalFittingPriority: .required, // Width is fixed
-            verticalFittingPriority: .fittingSizeLevel) // Height can be as large as needed
-    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = (collectionGallery.frame.size.width / 2) - 10
+        return CGSize(width: cellWidth, height: kGalleryPhotoHeight)
     }
-    /*
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == presenter.allPhotos.count - 4 {
-            print("page Here")
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        for cell in collectionGallery.visibleCells {
-            let indexPath = collectionGallery.indexPath(for: cell)
-            print(indexPath)
-        }
-    }
-    */
-    
-    
-    
 }
 
 extension DetailsViewController : DetailsProtocol {

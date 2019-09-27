@@ -52,7 +52,14 @@ extension ImagesListingViewController : UICollectionViewDelegate , UICollectionV
                 presenter.getMoviePhotos()
             }
         }
+}
+
+extension ImagesListingViewController : UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = (collectionImages.frame.size.width / 2) - 10
+        return CGSize(width: cellWidth, height: kGalleryPhotoHeight)
+    }
 }
 
 extension ImagesListingViewController : ImagesListingProtocol {
