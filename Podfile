@@ -11,11 +11,13 @@ target 'Movie challenge' do
   target 'Movie challengeTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'SDWebImage', '~> 5.0'
   end
 
   target 'Movie challengeUITests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'SDWebImage', '~> 5.0'
   end
 
 end

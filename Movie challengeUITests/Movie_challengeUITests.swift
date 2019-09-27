@@ -25,35 +25,23 @@ class Movie_challengeUITests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
     
     func testAppFlow() {
         
         let app = XCUIApplication()
-        let movietableTable = app.tables
-        movietableTable.staticTexts["The Strange Ones"].tap()
-        let scrollViewsQuery = app.scrollViews
-        let tablesQuery = scrollViewsQuery.otherElements.tables
-        let leighWhannellStaticText = tablesQuery.staticTexts["Emily Althaus"]
-        leighWhannellStaticText.swipeUp()
-        leighWhannellStaticText.swipeDown()
-        tablesQuery.staticTexts["Alex Pettyfer"].swipeUp()
+        let tablesQuery = app.tables
+        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["The Strange Ones"]/*[[".cells[\"The Strange Ones\"].staticTexts[\"The Strange Ones\"]",".staticTexts[\"The Strange Ones\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         let collectionViewsQuery = app/*@START_MENU_TOKEN@*/.collectionViews/*[[".scrollViews.collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        collectionViewsQuery.otherElements.containing(.staticText, identifier:"Images :").element.swipeUp()
+        let scrollViewsQuery = app.scrollViews
+        scrollViewsQuery.otherElements.tables/*@START_MENU_TOKEN@*/.staticTexts["Tobias Campbell"]/*[[".cells.staticTexts[\"Tobias Campbell\"]",".staticTexts[\"Tobias Campbell\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeDown()
         let moviesButton = app.navigationBars["Movie_challenge.DetailsView"].buttons["MOVIES"]
         moviesButton.tap()
-        movietableTable.staticTexts["Beirut"].tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Beirut"]/*[[".cells[\"Beirut\"].staticTexts[\"Beirut\"]",".staticTexts[\"Beirut\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         tablesQuery.staticTexts["Mark Pellegrino"].swipeUp()
         scrollViewsQuery.otherElements.containing(.staticText, identifier:"Show all images").children(matching: .button).element.tap()
-        let collectionViewsQuery2 = app.collectionViews
-        collectionViewsQuery2.staticTexts["XNM 05"].swipeUp()
-        collectionViewsQuery2.staticTexts["IMGL97557"].swipeDown()
         app.navigationBars["Movie_challenge.ImagesListingView"].buttons["Back"].tap()
         moviesButton.tap()
+        
     }
     
     func testSearch() {
